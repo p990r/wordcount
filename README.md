@@ -24,7 +24,7 @@ A text file with 4255 wikipedia urls.
       1. The characters in words are lowered and split by non alpha characters, and saved into a list of words.
       1. All non-alphabetical characters are removed from list of words.
       1. Add list of words to `set`.
-   1. Make a `union_set` of `set` in object and all previous objects
+1. Make a `union_set` of `set` in object and all previous objects
       
 ## Conclusion
 I tried two approaches:
