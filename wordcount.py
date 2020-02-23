@@ -1,9 +1,6 @@
-from urllib.request import urlopen
-from urllib.error import HTTPError, URLError
-from bs4 import BeautifulSoup as bs
-import re
 import concurrent.futures
 import time
+import urlObj
 
 
 def text_to_list(path):
@@ -15,56 +12,9 @@ def text_to_list(path):
     return list
 
 
-def get_page(url):
-    try:
-        return urlopen(url, timeout = 2).read()
-    except (HTTPError, URLError):
-        return None
-
-
-def parse_html(page):
-    try:
-        return bs(page, features="html.parser")
-    except AttributeError:
-        return None
-
-
-def decode_html(page):
-    # kill all script and style elements
-    for script in page(["script", "style"]):
-        script.extract()  # rip it out
-    # get text
-    text = page.get_text()
-    # break into lines and remove leading and trailing space on each
-    lines = (line.strip() for line in text.splitlines())
-    # break multi-headlines into a line each
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-    # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
-    return text
-
-
-def page_to_words(page):
-    words = []
-    html = parse_html(page)
-    text = decode_html(html)
-    strings = text.lower().split()
-    for string in strings:
-        string_list = re.split('[^a-z]', string)
-        for str in string_list:
-            words.append(re.sub('[^a-z]', '', str))
-    return words
-
-
 def make_set(url):
-    page = get_page(url)
-    if (page):
-        words_list = page_to_words(page)
-        words_set = set(words_list)
-    else:
-        print('Error: ' + url + ' does not exist')
-        return set()
-    return words_set
+    obj = urlObj.UrlObj(url)
+    return obj.words_set
 
 
 def main():
