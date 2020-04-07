@@ -1,7 +1,3 @@
-"""
-This class contains unit testing to graphics functions
-"""
-
 import urlObj
 import unittest
 
